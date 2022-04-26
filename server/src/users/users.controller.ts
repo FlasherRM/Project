@@ -78,6 +78,17 @@ export class UsersController {
       @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
       @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number = 5,
   ) {
+    if(page == 0) {
+      return {
+        "success": false,
+        "message": "Validation failed",
+        "fails": {
+          "page": [
+            "The page must be at least 1."
+          ]
+        }
+      }
+    }
     limit = limit > 100 ? 100 : limit;
     const data = await this.usersService.paginate({
       page,
@@ -100,12 +111,32 @@ export class UsersController {
         "next_url": "test",
         "prev_url": "test",
       },
-      "users": data.items
+      "users": data.items.map(item => {
+        return {
+          "id": item.id,
+          "name": item.name,
+          "email": item.email,
+          "phone": item.phone,
+          "position": item.position.name,
+          "position_id": item.position.id,
+          "photo": "http://localhost:5000/api/v1/uploads/" + item.photo
+        }
+      })
     };
   }
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-
+  async findOne(@Param('id', ParseIntPipe) id: string) {
+    if(typeof(id) == 'string') {
+      return {
+        "success": false,
+        "message": "Validation failed",
+        "fails": {
+          "user_id": [
+            "The user_id must be an integer."
+          ]
+        }
+      }
+    }
     const user = await this.usersService.findOne(+id);
     if(user) {
       return {

@@ -46,6 +46,17 @@ let UsersController = class UsersController {
         };
     }
     async findAll(page = 1, limit = 5) {
+        if (page == 0) {
+            return {
+                "success": false,
+                "message": "Validation failed",
+                "fails": {
+                    "page": [
+                        "The page must be at least 1."
+                    ]
+                }
+            };
+        }
         limit = limit > 100 ? 100 : limit;
         const data = await this.usersService.paginate({
             page,
@@ -68,10 +79,31 @@ let UsersController = class UsersController {
                 "next_url": "test",
                 "prev_url": "test",
             },
-            "users": data.items
+            "users": data.items.map(item => {
+                return {
+                    "id": item.id,
+                    "name": item.name,
+                    "email": item.email,
+                    "phone": item.phone,
+                    "position": item.position.name,
+                    "position_id": item.position.id,
+                    "photo": "http://localhost:5000/api/v1/uploads/" + item.photo
+                };
+            })
         };
     }
     async findOne(id) {
+        if (typeof (id) == 'string') {
+            return {
+                "success": false,
+                "message": "Validation failed",
+                "fails": {
+                    "user_id": [
+                        "The user_id must be an integer."
+                    ]
+                }
+            };
+        }
         const user = await this.usersService.findOne(+id);
         if (user) {
             return {
@@ -138,7 +170,7 @@ __decorate([
 ], UsersController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

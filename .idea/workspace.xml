@@ -14,6 +14,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28IvdGEvcunmrpNSrkLKTG2AAes" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -26,7 +27,13 @@
     "last_opened_file_path": "/var/www/html/apps/Project/server",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "MTConfigurable",
+    "ts.external.directory.path": "/var/www/html/apps/Project/server/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
@@ -43,6 +50,7 @@
       <option name="presentableId" value="Default" />
       <updated>1650917001978</updated>
       <workItem from="1650917006943" duration="614000" />
+      <workItem from="1650975996536" duration="2064000" />
     </task>
     <servers />
   </component>

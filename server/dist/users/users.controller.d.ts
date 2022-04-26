@@ -19,6 +19,19 @@ export declare class UsersController {
     findAll(page?: number, limit?: number): Promise<{
         success: boolean;
         message: string;
+        fails: {
+            page: string[];
+        };
+        page?: undefined;
+        total_pages?: undefined;
+        total_items?: undefined;
+        count?: undefined;
+        links?: undefined;
+        users?: undefined;
+    } | {
+        success: boolean;
+        message: string;
+        fails?: undefined;
         page?: undefined;
         total_pages?: undefined;
         total_items?: undefined;
@@ -35,10 +48,26 @@ export declare class UsersController {
             next_url: string;
             prev_url: string;
         };
-        users: import("./entities/user.entity").User[];
+        users: {
+            id: number;
+            name: string;
+            email: string;
+            phone: string;
+            position: string;
+            position_id: number;
+            photo: string;
+        }[];
         message?: undefined;
+        fails?: undefined;
     }>;
     findOne(id: string): Promise<{
+        success: boolean;
+        message: string;
+        fails: {
+            user_id: string[];
+        };
+        user?: undefined;
+    } | {
         success: boolean;
         user: {
             id: number;
@@ -51,12 +80,5 @@ export declare class UsersController {
         };
         message?: undefined;
         fails?: undefined;
-    } | {
-        success: boolean;
-        message: string;
-        fails: {
-            user_id: string[];
-        };
-        user?: undefined;
     }>;
 }
