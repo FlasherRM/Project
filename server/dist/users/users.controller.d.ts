@@ -9,12 +9,17 @@ export declare class UsersController {
         success: boolean;
         message: string;
         user_id?: undefined;
-        file?: undefined;
+        error?: undefined;
     } | {
         success: boolean;
         user_id: number;
         message: string;
-        file: any;
+        error?: undefined;
+    } | {
+        error: any;
+        success?: undefined;
+        message?: undefined;
+        user_id?: undefined;
     }>;
     findAll(page?: number, limit?: number): Promise<{
         success: boolean;

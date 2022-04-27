@@ -7,6 +7,7 @@ import {PositionsModule} from "./positions/positions.module";
 import { TokenModule } from './token/token.module';
 import {JwtModule} from "@nestjs/jwt";
 import { MulterModule } from '@nestjs/platform-express';
+import {memoryStorage} from "multer";
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { MulterModule } from '@nestjs/platform-express';
     synchronize: true,
   }),
     MulterModule.register({
-      dest: './uploads'
+      dest: './uploads',
+      storage: memoryStorage()
     }),
     UsersModule,PositionsModule, TokenModule],
   controllers: [AppController],

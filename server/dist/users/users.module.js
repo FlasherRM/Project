@@ -15,13 +15,15 @@ const user_entity_1 = require("./entities/user.entity");
 const position_entity_1 = require("../positions/entities/position.entity");
 const jwt_1 = require("@nestjs/jwt");
 const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
     (0, common_1.Module)({
         imports: [
             platform_express_1.MulterModule.register({
-                dest: './uploads'
+                dest: './uploads',
+                storage: (0, multer_1.memoryStorage)()
             }),
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, position_entity_1.Position]),
             jwt_1.JwtModule.register({

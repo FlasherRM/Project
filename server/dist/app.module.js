@@ -15,6 +15,7 @@ const users_module_1 = require("./users/users.module");
 const positions_module_1 = require("./positions/positions.module");
 const token_module_1 = require("./token/token.module");
 const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -31,7 +32,8 @@ AppModule = __decorate([
                 synchronize: true,
             }),
             platform_express_1.MulterModule.register({
-                dest: './uploads'
+                dest: './uploads',
+                storage: (0, multer_1.memoryStorage)()
             }),
             users_module_1.UsersModule, positions_module_1.PositionsModule, token_module_1.TokenModule
         ],

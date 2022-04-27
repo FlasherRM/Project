@@ -26,26 +26,31 @@ let UsersController = class UsersController {
         this.jwtService = jwtService;
     }
     async create(createUserDto, file, headers) {
-        const check = this.jwtService.verify(headers.token);
-        const candidate = await this.usersService.getUserByEmail(createUserDto.email, createUserDto.phone);
-        if (candidate) {
+        try {
+            const candidate = await this.usersService.getUserByEmail(createUserDto.email, createUserDto.phone);
+            if (candidate) {
+                return {
+                    "success": false,
+                    "message": "User with this phone or email already exist"
+                };
+            }
+            if (file.size > 5000000) {
+                return "The file size is too big";
+            }
+            const user = await this.usersService.create(createUserDto, file.filename);
             return {
-                "success": false,
-                "message": "User with this phone or email already exist"
+                "success": true,
+                "user_id": user.id,
+                "message": "New user successfully registered",
             };
         }
-        if (file.size > 5000000) {
-            return "The file size is too big";
+        catch (e) {
+            return {
+                error: e
+            };
         }
-        const user = await this.usersService.create(createUserDto, file.filename);
-        return {
-            "success": true,
-            "user_id": user.id,
-            "message": "New user successfully registered",
-            file: file.filename
-        };
     }
-    async findAll(page = 1, limit = 5) {
+    async findAll(page = 1, limit = 6) {
         if (page == 0) {
             return {
                 "success": false,
@@ -115,7 +120,7 @@ let UsersController = class UsersController {
                     "phone": user.phone,
                     "position": user.position.name,
                     "position_id": user.position.id,
-                    "photo": 'http://localhost:5000/uploads/' + user.photo
+                    "photo": 'http://localhost:5000/api/v1/uploads/' + user.photo
                 }
             };
         }
@@ -163,7 +168,7 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
-    __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(5), common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(6), common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)

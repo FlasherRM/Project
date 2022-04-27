@@ -6,12 +6,14 @@ import {User} from "./entities/user.entity";
 import {Position} from "../positions/entities/position.entity";
 import {JwtModule} from "@nestjs/jwt";
 import {MulterModule} from "@nestjs/platform-express";
+import {memoryStorage} from "multer";
 
 @Module({
   imports: [
       MulterModule.register({
-      dest: './uploads'
-  }),
+          dest: './uploads',
+          storage: memoryStorage()
+      }),
       TypeOrmModule.forFeature([User, Position],
       ),
   JwtModule.register({

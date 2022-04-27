@@ -46,37 +46,38 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto,
                @UploadedFile() file: any,
                @Headers() headers) {
-    // try {
-    const check = this.jwtService.verify(headers.token)
-    const candidate = await this.usersService.getUserByEmail(createUserDto.email, createUserDto.phone);
-    if (candidate) {
+    try {
+      // const check = this.jwtService.verify(headers.token)
+      const candidate = await this.usersService.getUserByEmail(createUserDto.email, createUserDto.phone);
+      if (candidate) {
+        return {
+          "success": false,
+          "message": "User with this phone or email already exist"
+        }
+      }
+      if (file.size > 5000000) {
+        return "The file size is too big"
+      }
+      const user = await this.usersService.create(createUserDto, file.filename)
       return {
-        "success": false,
-        "message": "User with this phone or email already exist"
+        "success": true,
+        "user_id": user.id,
+        "message": "New user successfully registered",
+      };
+    } catch (e) {
+      return {
+        // "success": false,
+        // "message": "The token expired."
+        error: e
       }
     }
-    if (file.size > 5000000) {
-      return "The file size is too big"
-    }
-    const user = await this.usersService.create(createUserDto, file.filename)
-    return {
-      "success": true,
-      "user_id": user.id,
-      "message": "New user successfully registered",
-      file: file.filename
-    };
-    // } catch (e) {
-      // return {
-      //   "success": false,
-      //   "message": "The token expired."
-      // }
-    }
+  }
 
 
   @Get()
   async findAll(
       @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-      @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number = 5,
+      @Query('limit', new DefaultValuePipe(6), ParseIntPipe) limit: number = 6,
   ) {
     if(page == 0) {
       return {
@@ -148,7 +149,7 @@ export class UsersController {
           "phone": user.phone,
           "position": user.position.name,
           "position_id": user.position.id,
-          "photo": 'http://localhost:5000/uploads/' + user.photo
+          "photo": 'http://localhost:5000/api/v1/uploads/' + user.photo
         }
     }
     } else {
